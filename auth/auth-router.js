@@ -1,7 +1,16 @@
 const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 
-const Users = require("../users/users-model");
+const Users = require("../users/users-model.js");
+const restricted = require("./restricted-middleware.js");
+
+router.get("/users", restricted, (req, res) => {
+  Users.find()
+    .then(users => {
+      res.json(users);
+    })
+    .catch(err => res.send(err));
+});
 
 router.post("/register", (req, res) => {
   let user = req.body;
