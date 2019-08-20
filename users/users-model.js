@@ -7,7 +7,11 @@ module.exports = {
   findById
 };
 
-// const find = () => {} // does not hoist
+async function add(user) {
+  const [id] = await db("users").insert(user);
+
+  return findById(id);
+}
 
 function find() {
   return db("users").select("id", "username");
@@ -15,12 +19,6 @@ function find() {
 
 function findBy(filter) {
   return db("users").where(filter);
-}
-
-async function add(user) {
-  const [id] = await db("users").insert(user);
-
-  return findById(id);
 }
 
 function findById(id) {
