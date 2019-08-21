@@ -66,4 +66,6 @@ router.get("/restest", (req, res) => {
     .json({ message: "You have sucessfully accessed a restricted route." });
 });
 
+router.get("/user", (req, res) => {});
+
 module.exports = router;
