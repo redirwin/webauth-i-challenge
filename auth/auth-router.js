@@ -35,7 +35,7 @@ router.post("/login", (req, res) => {
     .first()
     .then(user => {
       if (user && bcrypt.compareSync(password, user.password)) {
-        req.session.user = user;
+        req.session.userId = user.id;
         res.status(200).json({ message: `${user.username} logged in.` });
       } else {
         res.status(401).json({ message: "You shall not pass!" });
@@ -67,9 +67,16 @@ router.get("/restest", (req, res) => {
 });
 
 router.get("/user", (req, res) => {
-  const user = req.session.user;
-  if (user) {
-    res.status(200).json(user);
+  if (req.session.userId) {
+    Users.findById(req.session.userId)
+      .then(user => {
+        res.json(user);
+      })
+      .catch(err =>
+        res.status(500).json({
+          message: "There was an error getting the user information."
+        })
+      );
   } else {
     res.status(400).json({ message: "There is no logged-in user." });
   }
