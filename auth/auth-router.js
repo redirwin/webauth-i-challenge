@@ -24,7 +24,7 @@ router.post("/register", (req, res) => {
       res.status(201).json(saved);
     })
     .catch(err => {
-      res.status(500).json(error);
+      res.status(500).json(err);
     });
 });
 
@@ -36,6 +36,7 @@ router.post("/login", (req, res) => {
     .then(user => {
       if (user && bcrypt.compareSync(password, user.password)) {
         req.session.userId = user.id;
+        req.session.loggedIn = true;
         res.status(200).json({ message: `${user.username} logged in.` });
       } else {
         res.status(401).json({ message: "You shall not pass!" });
@@ -58,12 +59,6 @@ router.get("/logout", (req, res) => {
   } else {
     res.status(200).json({ message: "Not logged in." });
   }
-});
-
-router.get("/restest", (req, res) => {
-  res
-    .status(400)
-    .json({ message: "You have sucessfully accessed a restricted route." });
 });
 
 router.get("/user", (req, res) => {
