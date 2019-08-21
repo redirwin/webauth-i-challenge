@@ -8,6 +8,7 @@ const KnexSessionStore = require("connect-session-knex")(session);
 const knexConnection = require("../data/db-config");
 
 const authRouter = require("../auth/auth-router");
+const restricted = require("../auth/restricted-middleware");
 
 const server = express();
 
@@ -35,6 +36,7 @@ server.use(cors());
 server.use(session(sessionConfig));
 
 server.use("/api/auth", authRouter);
+server.use("/api/restricted", restricted, authRouter);
 
 server.get("/", (req, res) => {
   res.status(200).json({ message: "It's working!!" });

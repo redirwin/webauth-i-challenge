@@ -60,4 +60,10 @@ router.get("/logout", (req, res) => {
   }
 });
 
+router.get("/restest", (req, res) => {
+  res
+    .status(400)
+    .json({ message: "You have sucessfully accessed a restricted route." });
+});
+
 module.exports = router;
