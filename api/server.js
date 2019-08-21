@@ -2,6 +2,8 @@ const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
 const session = require("express-session");
+const KnexSessionStore = require("connect-session-knex")(session);
+const knexConnection = require("../data/db-config");
 
 const authRouter = require("../auth/auth-router");
 
@@ -16,7 +18,12 @@ const sessionConfig = {
     httpOnly: true
   },
   resave: false,
-  saveUninitialized: true // GDPR laws against setting cookies automatically. Set to 'false' in production!
+  saveUninitialized: true, // GDPR laws against setting cookies automatically. Set to 'false' in production!
+  store: new KnexSessionStore({
+    knex: knexConnection,
+    createtable: true,
+    clearInterval: 1000 * 60 * 60 // clear expired sessions after 1 hour
+  })
 };
 
 server.use(helmet());
