@@ -2,6 +2,8 @@ const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
 const session = require("express-session");
+
+// next 2 lines help setup session storage to database
 const KnexSessionStore = require("connect-session-knex")(session);
 const knexConnection = require("../data/db-config");
 
@@ -20,6 +22,7 @@ const sessionConfig = {
   resave: false,
   saveUninitialized: true, // GDPR laws against setting cookies automatically. Set to 'false' in production!
   store: new KnexSessionStore({
+    // creates table in database for saving sessions
     knex: knexConnection,
     createtable: true,
     clearInterval: 1000 * 60 * 60 // clear expired sessions after 1 hour
