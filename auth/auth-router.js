@@ -66,6 +66,13 @@ router.get("/restest", (req, res) => {
     .json({ message: "You have sucessfully accessed a restricted route." });
 });
 
-router.get("/user", (req, res) => {});
+router.get("/user", (req, res) => {
+  const user = req.session.user;
+  if (user) {
+    res.status(200).json(user);
+  } else {
+    res.status(400).json({ message: "There is no logged-in user." });
+  }
+});
 
 module.exports = router;
